@@ -1,0 +1,34 @@
+<!-- src/app/courses/course-list.page.html -->
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Our Catalog</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="goToAddCourse()">
+        <ion-icon name="add"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>We propose these new courses :</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-list>
+        <ion-item *ngFor="let course of courses" (click)="goToDetail(course.id)">
+          <ion-avatar slot="start">
+            <img [src]="course.icon" alt="{{ course.title }}">
+          </ion-avatar>
+          <ion-label>
+            <h2>{{ course.title }}</h2>
+          </ion-label>
+          <ion-note slot="end">
+            <ion-icon name="chevron-forward"></ion-icon>
+          </ion-note>
+        </ion-item>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

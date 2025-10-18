@@ -1,0 +1,7 @@
+{
+  "name": "CoursesApp",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}

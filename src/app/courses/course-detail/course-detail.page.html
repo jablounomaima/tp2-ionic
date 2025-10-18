@@ -1,0 +1,41 @@
+<!-- src/app/courses/course-detail.page.html -->
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/course-list"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Details</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="deleteCourse()">
+        <ion-icon name="trash"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Details of this course</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <div style="text-align: center; margin-bottom: 20px;">
+        <img [src]="course?.icon" alt="{{ course?.title }}" style="max-width: 200px; border-radius: 10px;">
+      </div>
+
+      <h2>{{ course?.title }} By {{ course?.author }}</h2>
+
+      <h3>Content of this course</h3>
+      <ion-list>
+        <ion-item *ngFor="let keyword of course?.keywords">
+          {{ keyword }}
+        </ion-item>
+      </ion-list>
+
+      <h3 *ngIf="course?.images && course.images.length > 0">Images about this course</h3>
+      <div *ngIf="course?.images && course.images.length > 0" style="display: flex; flex-wrap: wrap; gap: 10px;">
+        <img *ngFor="let img of course.images" [src]="img" alt="Image du cours" style="width: 120px; height: auto; object-fit: cover; border-radius: 8px;">
+      </div>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

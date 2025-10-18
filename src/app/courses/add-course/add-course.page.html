@@ -1,0 +1,69 @@
+<!-- src/app/courses/add-course.page.html -->
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/course-list"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Add New Course</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Create a new course</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-item>
+        <ion-label position="stacked">Icon URL</ion-label>
+        <ion-input [(ngModel)]="newCourse.icon" placeholder="https://..."></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Title</ion-label>
+        <ion-input [(ngModel)]="newCourse.title" placeholder="Enter course title"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Author</ion-label>
+        <ion-input [(ngModel)]="newCourse.author" placeholder="Enter author name"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Keywords (press space to add)</ion-label>
+        <ion-input 
+          [(ngModel)]="keywordInput" 
+          (keyup.enter)="addKeyword()" 
+          (keyup.space)="addKeyword()"
+          placeholder="Type keyword and press Space">
+        </ion-input>
+      </ion-item>
+
+      <div style="margin: 10px 0;">
+        <ion-chip *ngFor="let kw of newCourse.keywords; let i = index" (click)="removeKeyword(i)" color="primary">
+          <ion-label>{{ kw }}</ion-label>
+          <ion-icon name="close-circle"></ion-icon>
+        </ion-chip>
+      </div>
+
+      <ion-button expand="full" (click)="takePicture()">Add Image from Gallery/Camera</ion-button>
+
+      <div *ngIf="newCourse.images.length > 0" style="margin-top: 20px;">
+        <h3>Uploaded Images:</h3>
+        <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+          <div *ngFor="let img of newCourse.images; let i = index" style="position: relative; width: 100px; height: 100px;">
+            <img [src]="img" alt="Preview" style="width: 100%; height: 100%; object-fit: cover; border-radius: 8px;">
+            <ion-button fill="clear" size="small" style="position: absolute; top: 0; right: 0;" (click)="removeImage(i)">
+              <ion-icon name="close-circle" color="danger"></ion-icon>
+            </ion-button>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top: 30px;">
+        <ion-button expand="full" (click)="saveCourse()">Save Course</ion-button>
+        <ion-button expand="full" fill="outline" (click)="cancel()">Cancel</ion-button>
+      </div>
+    </ion-card-content>
+  </ion-card>
+</ion-content>
