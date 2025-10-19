@@ -1,18 +1,16 @@
-// src/app/courses/add-course.page.ts
-import { CommonModule } from '@angular/common';
+// src/app/courses/add-course/add-course.page.ts
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
-import { Filesystem, Directory } from '@capacitor/filesystem';
-import { IonicModule } from '@ionic/angular';
+// ✅ Correct import
 
+import { CourseService } from '../../services/course.service';
 @Component({
-  
+  standalone:false,
   selector: 'app-add-course',
   templateUrl: './add-course.page.html',
-  styleUrls: ['./add-course.page.scss'],
-  imports: [IonicModule, CommonModule, FormsModule]
+  styleUrls: ['./add-course.page.scss']
 })
 export class AddCoursePage {
   newCourse = {
@@ -24,23 +22,24 @@ export class AddCoursePage {
   };
 
   keywordInput = '';
+  router: any;
 
-  constructor(private router: Router) {}
-
+  constructor(private courseService: CourseService) {}
   async takePicture() {
     try {
       const image = await Camera.getPhoto({
         quality: 90,
         allowEditing: false,
-        resultType: CameraResultType.Base64,
-        source: CameraSource.Photos // ou CameraSource.Camera
+        resultType: CameraResultType.DataUrl, // or Base64
+        source: CameraSource.Prompt // Shows choice: Camera or Photos
       });
-
-      const base64Data = image.base64String;
-      const imageUrl = `data:image/jpeg;base64,${base64Data}`;
-      this.newCourse.images.push(imageUrl);
-    } catch (e) {
-      console.error('Erreur lors de la prise de photo:', e);
+  
+      if (image.dataUrl) {
+        this.newCourse.images.push(image.dataUrl);
+      }
+    } catch (error) {
+      console.error('User cancelled or error:', error);
+      // Handle permission denied, user cancel, etc.
     }
   }
 
@@ -60,9 +59,20 @@ export class AddCoursePage {
   }
 
   saveCourse() {
-    // Simuler l'ajout du cours (en vrai, vous sauvegarderiez dans un service ou localStorage)
-    console.log('Nouveau cours ajouté:', this.newCourse);
-    // Rediriger vers la liste
+    if (!this.newCourse.title || !this.newCourse.author || !this.newCourse.icon) {
+      alert('Veuillez remplir tous les champs obligatoires !');
+      return;
+    }
+
+    this.courseService.addCourse({
+      icon: this.newCourse.icon,
+      title: this.newCourse.title,
+      author: this.newCourse.author,
+      keywords: this.newCourse.keywords,
+      images: this.newCourse.images.length > 0 ? this.newCourse.images : undefined
+    });
+
+    console.log('Cours ajouté avec succès');
     this.router.navigate(['/course-list']);
   }
 
